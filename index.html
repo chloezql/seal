@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Seal</title>
+    <meta name="description" content="A place where the things you never said finally have somewhere to go." />
+    <link rel="icon" href="seal-mascot.png?v=1794791963" />
+    <style>
+      @font-face { font-family: Inter; font-weight: 400; font-display: swap; src: url(inter-latin-400-normal.woff2?v=1794791963) format("woff2"); }
+      @font-face { font-family: Inter; font-weight: 600; font-display: swap; src: url(inter-latin-600-normal.woff2?v=1794791963) format("woff2"); }
+      @font-face { font-family: Inter; font-weight: 700; font-display: swap; src: url(inter-latin-700-normal.woff2?v=1794791963) format("woff2"); }
+      @font-face { font-family: Inter; font-weight: 800; font-display: swap; src: url(inter-latin-800-normal.woff2?v=1794791963) format("woff2"); }
+      @font-face { font-family: Inter; font-weight: 900; font-display: swap; src: url(inter-latin-900-normal.woff2?v=1794791963) format("woff2"); }
+      @font-face { font-family: Inter; font-weight: 800; font-style: italic; font-display: swap; src: url(inter-latin-800-italic.woff2?v=1794791963) format("woff2"); }
+      @font-face { font-family: Inter; font-weight: 900; font-style: italic; font-display: swap; src: url(inter-latin-900-italic.woff2?v=1794791963) format("woff2"); }
+      * { box-sizing: border-box; }
+      html {
+        height: 100%;
+        scroll-behavior: smooth;
+        --s: 1;
+        --screen-radius: 44px;
+        --ink: #0b0b0f;
+        --ink2: #6b6b73;
+        --ink3: #a3a3ab;
+        --fill: #efeff4;
+        --base: #f7f7fa;
+        --sh1: 0 1px 2px rgba(16, 18, 30, 0.05), 0 6px 20px rgba(16, 18, 30, 0.07);
+      }
+      body {
+        min-height: 100%;
+        margin: 0;
+        background: var(--base);
+        color: var(--ink);
+        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", Inter, system-ui, sans-serif;
+        font-size: 17px;
+        line-height: 1.42;
+        letter-spacing: -0.01em;
+        -webkit-font-smoothing: antialiased;
+      }
+      p, h1, h2, ol { margin: 0; padding: 0; }
+      .page { display: none; }
+      .lockup { display: inline-flex; flex-direction: column; align-items: center; line-height: 1; font-style: italic; }
+      .lockup img { height: 0.85em; width: auto; margin-bottom: 0.36em; }
+      .lockup b { font-weight: 900; letter-spacing: -0.03em; line-height: 0.8; }
+      .lockup span { margin-top: 0.52em; font-size: 0.225em; font-weight: 700; letter-spacing: 0.1em; white-space: nowrap; }
+
+      .hero {
+        position: relative;
+        height: calc(100vh - 92px);
+        min-height: 520px;
+        padding: 16px 24px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: clamp(10px, 2vh, 20px);
+        text-align: center;
+      }
+      .sky {
+        position: absolute;
+        inset: 0 0 -92px;
+        z-index: -1;
+        background:
+          linear-gradient(180deg, rgba(247, 247, 250, 0) 52%, rgba(247, 247, 250, 0.6) 80%, var(--base)),
+          url(sky-cloudscape.jpg?v=1794791963) center 10% / cover;
+      }
+      .hero .logo { width: clamp(300px, 31vw, 450px); height: auto; margin-bottom: 12px; }
+      .hero h1 { max-width: 780px; font-size: clamp(30px, 5vh, 42px); line-height: 1.08; font-weight: 800; letter-spacing: -0.035em; }
+      .hero .belief { font-size: 19px; font-weight: 500; color: rgba(11, 11, 15, 0.82); margin-bottom: 8px; }
+      .pill {
+        height: 56px;
+        padding: 0 34px;
+        border-radius: 999px;
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        background: var(--ink);
+        color: #fff;
+        font-size: 17px;
+        font-weight: 600;
+        letter-spacing: -0.015em;
+        text-decoration: none;
+        box-shadow: 0 10px 24px rgba(11, 11, 15, 0.2);
+      }
+
+      .demo {
+        min-height: 100vh;
+        padding: 16px 24px 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+      }
+      .stage { display: flex; align-items: center; justify-content: center; gap: 32px; }
+      .slot { width: calc(413px * var(--s)); height: calc(867px * var(--s)); flex: none; }
+      .device {
+        position: relative;
+        width: 413px;
+        height: 867px;
+        padding: 11.5px;
+        border-radius: calc(var(--screen-radius) + 10px);
+        background: #0c0c0f;
+        box-shadow: inset 0 0 0 2px #2c2c33, 0 30px 70px rgba(20, 22, 40, 0.2), 0 6px 16px rgba(20, 22, 40, 0.12);
+        transform: scale(var(--s));
+        transform-origin: top left;
+      }
+      .device::before, .device::after { content: ""; position: absolute; width: 3px; border-radius: 2px; background: #0c0c0f; }
+      .device::before { left: -3px; top: 170px; height: 150px; clip-path: polygon(0 0, 100% 0, 100% 22%, 0 22%, 0 36%, 100% 36%, 100% 64%, 0 64%, 0 72%, 100% 72%, 100% 100%, 0 100%); }
+      .device::after { right: -3px; top: 240px; height: 96px; }
+      .screen { position: relative; width: 390px; height: 844px; border-radius: var(--screen-radius); overflow: hidden; background: var(--base); }
+      .screen iframe { display: block; width: 100%; height: 100%; border: 0; }
+      .status {
+        position: absolute; top: 0; left: 0; right: 0; height: 54px;
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 4px 30px 0 46px;
+        color: #fff; mix-blend-mode: difference; pointer-events: none;
+        font-size: 16px; font-weight: 600;
+      }
+      .island { position: absolute; top: 11px; left: 50%; width: 122px; height: 36px; margin-left: -61px; border-radius: 20px; background: #000; pointer-events: none; }
+      .home { position: absolute; bottom: 8px; left: 50%; width: 136px; height: 5px; margin-left: -68px; border-radius: 3px; background: #fff; mix-blend-mode: difference; pointer-events: none; }
+
+      .middle { width: 290px; flex: none; text-align: center; }
+      .middle .logo { width: 232px; height: auto; margin-bottom: 22px; }
+      button { font: inherit; letter-spacing: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+      .account { display: flex; align-items: center; gap: 10px; width: 100%; padding: 7px 0; }
+      .account.right { justify-content: flex-end; text-align: right; }
+      .account.left { text-align: left; }
+      .account b { display: block; font-size: 20px; font-weight: 700; letter-spacing: -0.025em; line-height: 1.15; }
+      .number { font-size: 21px; font-weight: 800; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; user-select: all; }
+      .arrow { width: 62px; height: 28px; flex: none; fill: none; stroke: var(--ink); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+      .account.right .arrow { transform: scaleX(-1) rotate(4deg); }
+      .account.left .arrow { transform: rotate(-3deg); }
+      .code { height: 46px; margin: 14px 0 8px; padding: 0 22px; border-radius: 999px; display: inline-flex; align-items: center; gap: 10px; background: var(--ink); color: #fff; font-size: 15px; font-weight: 600; box-shadow: 0 10px 24px rgba(11, 11, 15, 0.2); }
+      .code .number { letter-spacing: 0.08em; }
+      .steps { margin: 10px 0 0; padding: 0 4px; list-style: none; counter-reset: step; text-align: left; font-size: 15px; line-height: 1.35; }
+      .steps li { counter-increment: step; position: relative; padding: 0 0 10px 26px; }
+      .steps li:last-child { padding-bottom: 0; }
+      .steps li::before { content: counter(step); position: absolute; left: 2px; top: 0; color: var(--ink3); font-weight: 700; font-variant-numeric: tabular-nums; }
+      .cue { margin-top: 24px; padding: 16px 4px 0; border-top: 1px solid rgba(11, 11, 15, 0.08); font-size: 13px; font-weight: 500; color: var(--ink2); text-align: left; }
+      .note { font-size: 13px; color: var(--ink2); text-align: center; }
+      .note a { color: inherit; font-weight: 600; text-decoration-thickness: 1.5px; text-underline-offset: 4px; }
+
+      .small-screen {
+        display: flex; min-height: 100vh; padding: 32px; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 16px;
+        background: url(sky-cloudscape.jpg?v=1794791963) center / cover;
+      }
+      .small-screen .lockup { font-size: 84px; margin-bottom: 10px; }
+      .small-screen p { max-width: 300px; font-weight: 500; }
+      @media (min-width: 1000px) {
+        .page { display: block; }
+        .small-screen { display: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header class="hero">
+        <div class="sky"></div>
+        <img class="logo" src="logo-long-seal.png?v=1794791963" alt="Seal. Say the real thing." />
+        <h1>A place where the things you never said finally have somewhere to go.</h1>
+        <p class="belief">We're using AI to bring humans back to each other.</p>
+        <a class="pill" href="#demo">Try it <span>&darr;</span></a>
+      </header>
+      <main class="demo" id="demo">
+        <div class="stage">
+          <section class="slot">
+            <div class="device">
+              <div class="screen">
+                <iframe name="seal-left" title="Seal, Chloe's phone" data-src="app/?v=1794791963"></iframe>
+                <div class="status"><span>9:41</span><svg viewBox="0 0 70 14" width="70" height="14" aria-hidden="true" fill="currentColor"><rect x="0" y="9" width="3.2" height="5" rx="1"/><rect x="5" y="6.5" width="3.2" height="7.5" rx="1"/><rect x="10" y="3.5" width="3.2" height="10.5" rx="1"/><rect x="15" y="0.5" width="3.2" height="13.5" rx="1"/><path d="M32 3.2c2.6 0 5 1 6.8 2.7l-1.3 1.4A8 8 0 0 0 32 5.1a8 8 0 0 0-5.5 2.2l-1.3-1.4A9.9 9.9 0 0 1 32 3.2Zm0 3.7c1.6 0 3.1.6 4.2 1.7l-1.4 1.4a4 4 0 0 0-5.6 0l-1.4-1.4A6 6 0 0 1 32 6.9Zm0 3.7c.7 0 1.3.3 1.8.7L32 13.2l-1.8-1.9c.5-.4 1.1-.7 1.8-.7Z"/><rect x="45" y="1" width="21" height="12" rx="3.6" fill="none" stroke="currentColor" stroke-opacity=".45" stroke-width="1.1"/><rect x="46.8" y="2.8" width="17.4" height="8.4" rx="2.2"/><rect x="67.2" y="4.8" width="1.8" height="4.4" rx=".9" opacity=".5"/></svg></div>
+                <div class="island"></div>
+                <div class="home"></div>
+              </div>
+            </div>
+          </section>
+          <section class="middle">
+            <img class="logo" src="logo-long-seal.png?v=1794791963" alt="Seal. Say the real thing." />
+            <button class="account left" data-copy="2015550100" title="Copy Chloe's number">
+              <svg class="arrow" viewBox="0 0 64 28" aria-hidden="true"><path d="M60 16 C 47 5, 31 25, 8 13" /><path d="M18 4 L7 13 L20 20" /></svg>
+              <span><b>Chloe</b><span class="number">201 555 0100</span></span>
+            </button>
+            <button class="account right" data-copy="2015550101" title="Copy Kathy's number">
+              <span><b>Kathy</b><span class="number">201 555 0101</span></span>
+              <svg class="arrow" viewBox="0 0 64 28" aria-hidden="true"><path d="M60 16 C 47 5, 31 25, 8 13" /><path d="M18 4 L7 13 L20 20" /></svg>
+            </button>
+            <button class="code" data-copy="424242" title="Copy the code">Code for both<span class="number">424242</span></button>
+            <p class="cue">Click a phone to start.</p>
+            <ol class="steps">
+              <li>Sign in on both phones with the tester numbers and code.</li>
+              <li>Write to each other, or ask and answer a question.</li>
+              <li>Say yes on both sides.</li>
+            </ol>
+          </section>
+          <section class="slot">
+            <div class="device">
+              <div class="screen">
+                <iframe name="seal-right" title="Seal, Kathy's phone" data-src="app/?v=1794791963"></iframe>
+                <div class="status"><span>9:41</span><svg viewBox="0 0 70 14" width="70" height="14" aria-hidden="true" fill="currentColor"><rect x="0" y="9" width="3.2" height="5" rx="1"/><rect x="5" y="6.5" width="3.2" height="7.5" rx="1"/><rect x="10" y="3.5" width="3.2" height="10.5" rx="1"/><rect x="15" y="0.5" width="3.2" height="13.5" rx="1"/><path d="M32 3.2c2.6 0 5 1 6.8 2.7l-1.3 1.4A8 8 0 0 0 32 5.1a8 8 0 0 0-5.5 2.2l-1.3-1.4A9.9 9.9 0 0 1 32 3.2Zm0 3.7c1.6 0 3.1.6 4.2 1.7l-1.4 1.4a4 4 0 0 0-5.6 0l-1.4-1.4A6 6 0 0 1 32 6.9Zm0 3.7c.7 0 1.3.3 1.8.7L32 13.2l-1.8-1.9c.5-.4 1.1-.7 1.8-.7Z"/><rect x="45" y="1" width="21" height="12" rx="3.6" fill="none" stroke="currentColor" stroke-opacity=".45" stroke-width="1.1"/><rect x="46.8" y="2.8" width="17.4" height="8.4" rx="2.2"/><rect x="67.2" y="4.8" width="1.8" height="4.4" rx=".9" opacity=".5"/></svg></div>
+                <div class="island"></div>
+                <div class="home"></div>
+              </div>
+            </div>
+          </section>
+        </div>
+        <p class="note">Works best in Chrome. Every visitor shares these two demo accounts. <a href="app/?v=1794791963" target="_blank" rel="noopener">Open one phone on its own</a></p>
+      </main>
+    </div>
+    <div class="small-screen">
+      <div class="lockup"><img src="seal-mascot.png?v=1794791963" alt="" /><b>SEAL</b><span>Say the real thing.</span></div>
+      <p>This demo shows two phones side by side. Please open this link on a laptop.</p>
+    </div>
+    <script>
+      const wide = window.matchMedia("(min-width: 1000px)");
+      const frames = [...document.querySelectorAll("iframe")];
+      const middle = document.querySelector(".middle");
+      const insets =
+        'body > div[style*="safe-area-inset"] { padding-top: 54px !important; padding-bottom: 30px !important; }';
+
+      function fit() {
+        const scale = Math.min(1, (window.innerHeight - 62) / 867, (window.innerWidth - 402) / 826);
+        document.documentElement.style.setProperty("--s", Math.max(0.5, scale).toFixed(3));
+        const room = (867 * Math.max(0.5, scale) - 176) / middle.offsetHeight;
+        middle.style.transform = room < 1 ? "scale(" + room.toFixed(3) + ")" : "";
+      }
+      function load() {
+        if (!wide.matches) return;
+        for (const frame of frames) {
+          if (!frame.dataset.src) continue;
+          frame.src = frame.dataset.src;
+          delete frame.dataset.src;
+        }
+      }
+      // A browser reports no safe area, so tell each frame's safe-area probe where the island and the home bar are.
+      function pad() {
+        for (const frame of frames) {
+          const inner = frame.contentDocument;
+          if (!inner || !inner.head || inner.location.href === "about:blank" || inner.getElementById("seal-insets")) continue;
+          const style = inner.createElement("style");
+          style.id = "seal-insets";
+          style.textContent = insets;
+          inner.head.appendChild(style);
+        }
+      }
+      window.addEventListener("resize", fit);
+      window.addEventListener("load", fit);
+      wide.addEventListener("change", load);
+      fit();
+      load();
+      setInterval(pad, 100);
+
+      for (const button of document.querySelectorAll("[data-copy]")) {
+        button.addEventListener("click", () => navigator.clipboard.writeText(button.dataset.copy));
+      }
+    </script>
+  </body>
+</html>
